@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 type Field = "name" | "email" | "imageUrl" | "password" | null;
 
@@ -40,8 +42,17 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries());
+    const user = Object.fromEntries(formData.entries()) as {name:string,password:string,imageUrl:string,email:string};
     console.log(user,'user')
+    const {data,error}= await authClient.signUp.email({
+      ...user
+    })
+    if(data){
+      redirect('/')
+    }
+    if(error){
+      console.log(error)
+    }
     if (!name || !email || !password) {
       window.alert("Please fill in all required fields.");
       return;

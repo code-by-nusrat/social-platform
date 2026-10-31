@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,9 +27,20 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(false);
   const [focused, setFocused] = useState<"email" | "password" | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries()) as { password: string, email: string };
+    console.log(user, 'user')
+    const { data, error } = await authClient.signIn.email({
+      ...user
+    })
+    if (data) {
+      redirect('/')
+    }
+    if (error) {
+      console.log(error)
+    }
     if (!email || !password) {
       window.alert("Please fill in all fields.");
       return;
@@ -123,7 +136,7 @@ export default function LoginPage() {
             <div className="flex h-10 w-10 rotate-6 items-center justify-center rounded-xl bg-[#007a71] text-white">
               <Lock size={20} />
             </div>
-           
+
           </div>
 
           <div className="mb-8">
@@ -159,16 +172,16 @@ export default function LoginPage() {
             <Separator className="flex-1" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleEmailLogin} className="space-y-6">
             {/* Email — floating label */}
             <div className="relative">
               <Mail
-                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${
-                  focused === "email" ? "text-[#007a71]" : "text-muted-foreground"
-                }`}
+                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === "email" ? "text-[#007a71]" : "text-muted-foreground"
+                  }`}
               />
               <Input
                 id="email"
+                name='email'
                 type="email"
                 placeholder=" "
                 value={email}
@@ -189,14 +202,14 @@ export default function LoginPage() {
             {/* Password — floating label */}
             <div className="relative">
               <Lock
-                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${
-                  focused === "password"
+                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === "password"
                     ? "text-[#007a71]"
                     : "text-muted-foreground"
-                }`}
+                  }`}
               />
               <Input
                 id="password"
+                name='password'
                 type={showPassword ? "text" : "password"}
                 placeholder=" "
                 value={password}
