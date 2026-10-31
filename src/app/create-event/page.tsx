@@ -59,42 +59,51 @@ export default function CreateEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
+    //setError("");
+     console.log('event data',form)
     if (Object.values(form).some((v) => !v.trim())) {
       return setError("Please fill in every field.");
     }
     if (form.date < tomorrow) {
       return setError("Event date must be in the future.");
     }
+    const res = await fetch('http://localhost:5000/create-event',{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body:JSON.stringify(form)
+    })
+    const data =await res.json()
+    console.log(data)
 
-    const res = await fetch("/api/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // The creator's email is saved with the event
-      body: JSON.stringify({ ...form, creatorEmail: user?.email }),
-    });
+    // const res = await fetch("/api/events", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   // The creator's email is saved with the event
+    //   body: JSON.stringify({ ...form, creatorEmail: user?.email }),
+    // });
 
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      return setError(data.error || "Could not create the event.");
-    }
+    // if (!res.ok) {
+    //   const data = await res.json().catch(() => ({}));
+    //   return setError(data.error || "Could not create the event.");
+    // }
 
     setSuccess(true);
-    setTimeout(() => router.push("/events"), 1500);
+    // setTimeout(() => router.push("/events"), 1500);
   };
 
-  if (isPending) return null;
+  //if (isPending) return null;
 
   // No middleware: the page protects itself
-  if (!user) {
-    return (
-      <div className="py-24 text-center">
-        <p className="mb-4 text-lg">Please log in to create an event.</p>
-        <Button render={<Link href="/login" />}>Login</Button>
-      </div>
-    );
-  }
+//   if (!user) {
+//     return (
+//       <div className="py-24 text-center">
+//         <p className="mb-4 text-lg">Please log in to create an event.</p>
+//         <Button render={<Link href="/login" />}>Login</Button>
+//       </div>
+//     );
+//   }
 
   return (
     <div className="px-5 py-12">
@@ -103,7 +112,7 @@ export default function CreateEventPage() {
           <CardTitle className="text-3xl font-bold text-[#007a71]">
             Create an Event
           </CardTitle>
-          <CardDescription>Hosting as {user.email}</CardDescription>
+          <CardDescription>Hosting as {user?.email}</CardDescription>
         </CardHeader>
 
         <CardContent>

@@ -117,7 +117,7 @@ import { Button } from "@/components/ui/button";
 
 // Private / protected routes (also guarded in middleware.ts)
 const profileMenu = [
-  { label: "Create Event", href: "/events/create", icon: MdAddCircleOutline },
+  { label: "Create Event", href: "/create-event", icon: MdAddCircleOutline },
   { label: "Manage Events", href: "/events/manage", icon: MdEventNote },
   { label: "Joined Events", href: "/events/joined", icon: MdBookmarkAdded },
 ];
