@@ -50,9 +50,10 @@ export default function LoginPage() {
     window.alert("Connect Firebase authentication to complete login.");
   };
 
-  const handleGoogleLogin = () => {
-    // Connect Firebase Google authentication here.
-    window.alert("Connect Google authentication here.");
+  const handleGoogleLogin =async() => {
+     const data = await authClient.signIn.social({
+    provider: "google",
+  });
   };
 
   return (

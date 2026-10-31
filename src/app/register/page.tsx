@@ -83,9 +83,10 @@ export default function RegisterPage() {
     // updateProfile(user, { displayName: name, photoURL: imageUrl || null });
   };
 
-  const handleGoogleSignup = () => {
-    // Connect Firebase Google authentication here.
-    window.alert("Connect Google authentication here.");
+  const handleGoogleSignup = async() => {
+    const data = await authClient.signIn.social({
+    provider: "google",
+  });
   };
 
   const iconClass = (field: Field) =>
