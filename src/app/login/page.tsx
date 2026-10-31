@@ -237,7 +237,7 @@ export default function LoginPage() {
             </div>
 
             {/* Remember + forgot */}
-            <div className="flex items-center justify-between text-sm">
+            {/* <div className="flex items-center justify-between text-sm">
               <label className="flex cursor-pointer select-none items-center gap-2 text-muted-foreground">
                 <input
                   type="checkbox"
@@ -253,7 +253,7 @@ export default function LoginPage() {
               >
                 Forgot password?
               </Link>
-            </div>
+            </div> */}
 
             {/* Submit */}
             <Button

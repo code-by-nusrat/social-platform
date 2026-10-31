@@ -19,8 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
-
+// import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 type Field = "name" | "email" | "imageUrl" | "password" | null;
 
 const floatingLabel =
@@ -36,42 +36,51 @@ export default function RegisterPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [imageError, setImageError] = useState(false);
   const [password, setPassword] = useState("");
-  const [agree, setAgree] = useState(false);
+  // const [agree, setAgree] = useState(false);
   const [focused, setFocused] = useState<Field>(null);
+  const [passwordError, setPasswordError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries()) as {name:string,password:string,imageUrl:string,email:string};
-    console.log(user,'user')
-    const {data,error}= await authClient.signUp.email({
-      ...user
-    })
-    if(data){
-      redirect('/')
-    }
-    if(error){
-      console.log(error)
-    }
+    const user = Object.fromEntries(formData.entries()) as { name: string, password: string, imageUrl: string, email: string };
+    console.log(user, 'user')
+
     if (!name || !email || !password) {
       window.alert("Please fill in all required fields.");
       return;
     }
-
     if (password.length < 6) {
-      window.alert("Password must be at least 8 characters.");
+      window.alert("Password must be at least 6 characters.");
       return;
     }
 
-    if (!agree) {
-      window.alert("Please accept the Terms and Privacy Policy.");
+    if (!/[A-Z]/.test(password)) {
+      window.alert("Password must contain at least one uppercase letter.");
       return;
     }
 
-    // Connect Firebase createUserWithEmailAndPassword here.
-    // After creating the user, save `name` and `imageUrl` with updateProfile:
+    if (!/[a-z]/.test(password)) {
+      window.alert("Password must contain at least one lowercase letter.");
+      return;
+    }
+
+    // if (!agree) {
+    //   window.alert("Please accept the Terms and Privacy Policy.");
+    //   return;
+    // }
+
+    const { data, error } = await authClient.signUp.email({
+      ...user
+    })
+    if (data) {
+      router.push('/')
+    }
+    if (error) {
+      window.alert(error.message);
+    }
     // updateProfile(user, { displayName: name, photoURL: imageUrl || null });
-    window.alert("Connect Firebase authentication to complete registration.");
   };
 
   const handleGoogleSignup = () => {
@@ -80,8 +89,7 @@ export default function RegisterPage() {
   };
 
   const iconClass = (field: Field) =>
-    `absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${
-      focused === field ? "text-[#007a71]" : "text-muted-foreground"
+    `absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === field ? "text-[#007a71]" : "text-muted-foreground"
     }`;
 
   return (
@@ -99,7 +107,7 @@ export default function RegisterPage() {
             <div className="flex h-10 w-10 rotate-6 items-center justify-center rounded-xl bg-[#007a71] text-white">
               <Lock size={20} />
             </div>
-            
+
           </div>
 
           <div className="mb-8">
@@ -220,7 +228,8 @@ export default function RegisterPage() {
                 value={password}
                 onFocus={() => setFocused("password")}
                 onBlur={() => setFocused(null)}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => (
+                  setPassword(e.target.value))}
                 required
                 className={`${inputStyle} pr-12`}
               />
@@ -235,10 +244,15 @@ export default function RegisterPage() {
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
+              {passwordError && (
+                <p className="mt-2 text-sm text-red-600" role="alert">
+                  {passwordError}
+                </p>
+              )}
             </div>
 
             {/* Terms */}
-            <label className="flex cursor-pointer select-none items-start gap-2.5 text-sm text-muted-foreground">
+            {/* <label className="flex cursor-pointer select-none items-start gap-2.5 text-sm text-muted-foreground">
               <input
                 type="checkbox"
                 checked={agree}
@@ -262,7 +276,7 @@ export default function RegisterPage() {
                 </Link>
                 .
               </span>
-            </label>
+            </label> */}
 
             {/* Submit */}
             <Button
@@ -315,7 +329,7 @@ export default function RegisterPage() {
 
         {/* logo */}
         <div className="relative z-10 flex items-center justify-end gap-3">
-          
+
           <div className="flex h-11 w-11 -rotate-6 items-center justify-center rounded-xl bg-[#f4b942] text-[#04302d] shadow-lg">
             <Lock size={22} strokeWidth={2.5} />
           </div>
