@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import MyEventsList, { type MyEvent } from "@/components/my-events/MyEventsList";
+import MyEventsList, { type MyEvent } from "@/components/manage-event/MyEventList";
 
 const cursive = {
     fontFamily: "'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive",
