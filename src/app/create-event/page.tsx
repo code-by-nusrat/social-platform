@@ -84,7 +84,7 @@ export default function CreateEventPage() {
                 throw new Error(data.message || data.error || "Could not create the event.");
             }
             setSuccess(true);
-            setTimeout(() => router.push("/events"), 1500);
+            setTimeout(() => router.push("/upcoming-events"), 1500);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Something went wrong.");
             setSubmitting(false);
