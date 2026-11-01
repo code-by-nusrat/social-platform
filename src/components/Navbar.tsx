@@ -28,8 +28,8 @@ import { Button } from "@/components/ui/button";
 // Private / protected routes (also guarded in middleware.ts)
 const profileMenu = [
   { label: "Create Event", href: "/create-event", icon: MdAddCircleOutline },
-  { label: "Manage Events", href: "/manage-event", icon: MdEventNote },
-  { label: "Joined Events", href: "/joined-event", icon: MdBookmarkAdded },
+  { label: "Manage Event", href: "/manage-event", icon: MdEventNote },
+  { label: "Joined Event", href: "/joined-event", icon: MdBookmarkAdded },
 ];
 
 const Navbar = () => {
