@@ -9,7 +9,9 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Joinbtn, { type EventItem } from "@/components/joinbtn/Joinbtn";
+ 
 
+ 
 const cursive = {
     fontFamily: "'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive",
 };
@@ -31,7 +33,6 @@ export default function UpcomingEventDetailPage({
     const [joined, setJoined] = useState(false);
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
-
     // Load the event (also used to refresh the joined count after joining)
     const loadEvent = useCallback(async () => {
         try {
@@ -85,7 +86,7 @@ export default function UpcomingEventDetailPage({
     }
 
     return (
-        <div className="mx-auto max-w-6xl px-5 py-10">
+        <div className="mx-auto max-w-6xl px-5 py-10"> 
             <Link
                 href="/upcoming-events"
                 style={cursive}

@@ -19,15 +19,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-// import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
+
 type Field = "name" | "email" | "imageUrl" | "password" | null;
 
-const floatingLabel =
-  "pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-muted-foreground transition-all duration-200 peer-focus:top-3 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-[#007a71] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-semibold";
+// muted gray text: same color in light and dark mode
+const muted = "text-muted-foreground dark:text-[#737373]";
+
+const floatingLabel = `pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm ${muted} transition-all duration-200 peer-focus:top-3 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-[#007a71] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-semibold`;
 
 const inputStyle =
-  "peer h-14 rounded-xl border-2 bg-white pl-11 pt-4 focus-visible:border-[#007a71] focus-visible:ring-[#007a71]/20";
+  "peer h-14 rounded-xl border-2 bg-white pl-11 pt-4 text-[#0a0a0a] focus-visible:border-[#007a71] focus-visible:ring-[#007a71]/20 dark:border-[#e5e5e5] dark:bg-white dark:text-[#0a0a0a] dark:focus-visible:border-[#007a71]";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +38,6 @@ export default function RegisterPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [imageError, setImageError] = useState(false);
   const [password, setPassword] = useState("");
-  // const [agree, setAgree] = useState(false);
   const [focused, setFocused] = useState<Field>(null);
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
@@ -44,8 +45,13 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries()) as { name: string, password: string, imageUrl: string, email: string };
-    console.log(user, 'user')
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      password: string;
+      imageUrl: string;
+      email: string;
+    };
+    console.log(user, "user");
 
     if (!name || !email || !password) {
       window.alert("Please fill in all required fields.");
@@ -66,31 +72,26 @@ export default function RegisterPage() {
       return;
     }
 
-    // if (!agree) {
-    //   window.alert("Please accept the Terms and Privacy Policy.");
-    //   return;
-    // }
-
     const { data, error } = await authClient.signUp.email({
-      ...user
-    })
+      ...user,
+    });
     if (data) {
-      router.push('/')
+      router.push("/");
     }
     if (error) {
       window.alert(error.message);
     }
-    // updateProfile(user, { displayName: name, photoURL: imageUrl || null });
   };
 
-  const handleGoogleSignup = async() => {
+  const handleGoogleSignup = async () => {
     const data = await authClient.signIn.social({
-    provider: "google",
-  });
+      provider: "google",
+    });
   };
 
   const iconClass = (field: Field) =>
-    `absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === field ? "text-[#007a71]" : "text-muted-foreground"
+    `absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${
+      focused === field ? "text-[#007a71]" : muted
     }`;
 
   return (
@@ -108,14 +109,13 @@ export default function RegisterPage() {
             <div className="flex h-10 w-10 rotate-6 items-center justify-center rounded-xl bg-[#007a71] text-white">
               <Lock size={20} />
             </div>
-
           </div>
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold tracking-tight text-[#04302d]">
               Create your account<span className="text-[#f4b942]">.</span>
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className={`mt-2 text-sm ${muted}`}>
               It takes less than a minute to get started.
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function RegisterPage() {
           <Button
             type="button"
             variant="outline"
-            className="h-12 w-full gap-3 rounded-xl border-2 bg-white transition-all hover:-translate-y-0.5 hover:border-[#007a71] hover:shadow-md"
+            className="h-12 w-full gap-3 rounded-xl border-2 bg-white text-[#0a0a0a] transition-all hover:-translate-y-0.5 hover:border-[#007a71] hover:shadow-md dark:border-[#e5e5e5] dark:bg-white dark:text-[#0a0a0a] dark:hover:border-[#007a71] dark:hover:bg-[#f5f5f5]"
             onClick={handleGoogleSignup}
           >
             <svg viewBox="0 0 48 48" className="h-5 w-5">
@@ -137,11 +137,11 @@ export default function RegisterPage() {
           </Button>
 
           <div className="my-7 flex items-center gap-4">
-            <Separator className="flex-1" />
-            <span className="text-[11px] font-medium tracking-widest text-muted-foreground">
+            <Separator className="flex-1 dark:bg-[#e5e5e5]" />
+            <span className={`text-[11px] font-medium tracking-widest ${muted}`}>
               OR USE EMAIL
             </span>
-            <Separator className="flex-1" />
+            <Separator className="flex-1 dark:bg-[#e5e5e5]" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -151,7 +151,7 @@ export default function RegisterPage() {
               <Input
                 id="name"
                 type="text"
-                name='name'
+                name="name"
                 placeholder=" "
                 value={name}
                 onFocus={() => setFocused("name")}
@@ -170,7 +170,7 @@ export default function RegisterPage() {
               <Mail className={iconClass("email")} />
               <Input
                 id="email"
-                name='email'
+                name="email"
                 type="email"
                 placeholder=" "
                 value={email}
@@ -190,7 +190,7 @@ export default function RegisterPage() {
               <ImageIcon className={iconClass("imageUrl")} />
               <Input
                 id="imageUrl"
-                name='imageUrl'
+                name="imageUrl"
                 type="url"
                 placeholder=" "
                 value={imageUrl}
@@ -223,14 +223,13 @@ export default function RegisterPage() {
               <Lock className={iconClass("password")} />
               <Input
                 id="password"
-                name='password'
+                name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder=" "
                 value={password}
                 onFocus={() => setFocused("password")}
                 onBlur={() => setFocused(null)}
-                onChange={(e) => (
-                  setPassword(e.target.value))}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 className={`${inputStyle} pr-12`}
               />
@@ -240,7 +239,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-[#007a71]"
+                className={`absolute right-4 top-1/2 -translate-y-1/2 ${muted} transition-colors hover:text-[#007a71] dark:hover:text-[#007a71]`}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -251,33 +250,6 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-
-            {/* Terms */}
-            {/* <label className="flex cursor-pointer select-none items-start gap-2.5 text-sm text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={agree}
-                onChange={(e) => setAgree(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#007a71]"
-              />
-              <span>
-                I agree to the{" "}
-                <Link
-                  href="/terms"
-                  className="font-medium text-[#007a71] hover:underline"
-                >
-                  Terms
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy"
-                  className="font-medium text-[#007a71] hover:underline"
-                >
-                  Privacy Policy
-                </Link>
-                .
-              </span>
-            </label> */}
 
             {/* Submit */}
             <Button
@@ -296,7 +268,7 @@ export default function RegisterPage() {
             </Button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-muted-foreground">
+          <p className={`mt-8 text-center text-sm ${muted}`}>
             Already have an account?{" "}
             <Link
               href="/login"
@@ -330,7 +302,6 @@ export default function RegisterPage() {
 
         {/* logo */}
         <div className="relative z-10 flex items-center justify-end gap-3">
-
           <div className="flex h-11 w-11 -rotate-6 items-center justify-center rounded-xl bg-[#f4b942] text-[#04302d] shadow-lg">
             <Lock size={22} strokeWidth={2.5} />
           </div>

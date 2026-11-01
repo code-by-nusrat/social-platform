@@ -2,33 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
 
 const ThemeToggle = () => {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // wait until the page is on the client, so the icon matches the real theme
+  // wait for the client, so server and browser render the same thing first
   useEffect(() => setMounted(true), []);
 
-  const isDark = resolvedTheme === "dark";
+  // before mounting, always render the same default as the server
+  const isDark = mounted && resolvedTheme === "dark";
+  const label = isDark ? "Switch to light mode" : "Switch to dark mode";
 
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="icon"
-      aria-label="Toggle theme"
+      aria-label={label}
+      title={mounted ? label : undefined}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="h-10 w-10 rounded-full text-[#FDEB9E] hover:bg-white/15 hover:text-white"
+      className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15 hover:text-[#FDEB9E] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
     >
       {mounted ? (
-        isDark ? <MdLightMode className="text-2xl" /> : <MdDarkMode className="text-2xl" />
+        isDark ? <Sun size={22} /> : <Moon size={22} />
       ) : (
-        <span className="h-6 w-6" />
+        <span className="h-5.5 w-5.5" />
       )}
-    </Button>
+    </button>
   );
 };
 

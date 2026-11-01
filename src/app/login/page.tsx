@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -10,57 +9,69 @@ import {
   Lock,
   ArrowRight,
   ShieldCheck,
-  Sparkles,
   Zap,
+  Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
+type Field = "email" | "password" | null;
+
+// every color here is fixed, so dark mode cannot change it
+const grayText = "text-[#737373]";
+
+const floatingLabel = `pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm ${grayText} transition-all duration-200 peer-focus:top-3 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-[#007a71] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-semibold`;
+
+const inputStyle =
+  "peer h-14 w-full rounded-xl border-2 border-[#e5e5e5] bg-white pl-11 pt-4 text-base text-[#0a0a0a] outline-none transition-colors focus:border-[#007a71] focus:ring-4 focus:ring-[#007a71]/20";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
-  const [focused, setFocused] = useState<"email" | "password" | null>(null);
+  const [focused, setFocused] = useState<Field>(null);
+  const router = useRouter();
 
-  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries()) as { password: string, email: string };
-    console.log(user, 'user')
-    const { data, error } = await authClient.signIn.email({
-      ...user
-    })
-    if (data) {
-      redirect('/')
-    }
-    if (error) {
-      console.log(error)
-    }
+
     if (!email || !password) {
-      window.alert("Please fill in all fields.");
+      window.alert("Please fill in all required fields.");
       return;
     }
 
-    // Connect Firebase email/password login here.
-    window.alert("Connect Firebase authentication to complete login.");
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
+
+    if (data) {
+      router.push("/");
+      router.refresh();
+    }
+    if (error) {
+      window.alert(error.message);
+    }
   };
 
-  const handleGoogleLogin =async() => {
-     const data = await authClient.signIn.social({
-    provider: "google",
-  });
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
   };
+
+  const iconClass = (field: Field) =>
+    `absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${
+      focused === field ? "text-[#007a71]" : grayText
+    }`;
 
   return (
-    <main className="grid min-h-screen bg-[#f4f7f6] lg:grid-cols-[1.05fr_1fr]">
-      {/* ───────────── Brand panel ───────────── */}
-      <section className="relative hidden overflow-hidden bg-[#04302d] text-white lg:flex lg:flex-col lg:justify-between lg:p-14">
-        {/* dotted grid */}
+    <main
+      style={{ colorScheme: "light" }}
+      className="grid min-h-screen bg-[#f4f7f6] text-[#0a0a0a] lg:grid-cols-[1.05fr_1fr]"
+    >
+      {/* ───────────── Brand panel (left) ───────────── */}
+      <section className="relative hidden overflow-hidden bg-[#04302d] text-white lg:order-1 lg:flex lg:flex-col lg:justify-between lg:p-14">
         <div
           aria-hidden
           className="absolute inset-0 opacity-30"
@@ -70,7 +81,6 @@ export default function LoginPage() {
             backgroundSize: "26px 26px",
           }}
         />
-        {/* glow blobs */}
         <div
           aria-hidden
           className="absolute -left-24 -top-24 h-96 w-96 animate-pulse rounded-full bg-[#00b8a9] opacity-30 blur-3xl"
@@ -81,11 +91,10 @@ export default function LoginPage() {
         />
 
         {/* logo */}
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center justify-start gap-3">
           <div className="flex h-11 w-11 rotate-6 items-center justify-center rounded-xl bg-[#f4b942] text-[#04302d] shadow-lg">
             <Lock size={22} strokeWidth={2.5} />
           </div>
-          {/* <span className="text-xl font-semibold tracking-wide">YourBrand</span> */}
         </div>
 
         {/* headline */}
@@ -102,20 +111,20 @@ export default function LoginPage() {
               again.
             </span>
           </h1>
-          <p className="text-base leading-relaxed text-white/70">
+          <p className="max-w-md leading-relaxed text-white/70">
             Pick up right where you left off. Your workspace, your data, your
             pace — all one sign-in away.
           </p>
         </div>
 
-        {/* floating glass cards */}
-        <div className="relative z-10 flex gap-4">
-          <div className="-rotate-2 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md transition-transform duration-300 hover:-translate-y-1">
+        {/* floating cards */}
+        <div className="relative z-10 flex justify-start gap-4">
+          <div className="-rotate-2 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md transition-transform duration-300 hover:-translate-y-1">
             <ShieldCheck className="mb-2 text-[#5eead4]" size={22} />
             <p className="text-sm font-semibold">Protected</p>
             <p className="text-xs text-white/60">End-to-end secure</p>
           </div>
-          <div className="mt-4 rotate-2 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md transition-transform duration-300 hover:-translate-y-1">
+          <div className="mt-4 rotate-2 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md transition-transform duration-300 hover:-translate-y-1">
             <Zap className="mb-2 text-[#f4b942]" size={22} />
             <p className="text-sm font-semibold">Instant</p>
             <p className="text-xs text-white/60">One-click access</p>
@@ -123,9 +132,8 @@ export default function LoginPage() {
         </div>
       </section>
 
-      {/* ───────────── Form panel ───────────── */}
-      <section className="relative flex items-center justify-center px-5 py-12">
-        {/* soft decoration */}
+      {/* ───────────── Form panel (right) ───────────── */}
+      <section className="relative flex items-center justify-center px-5 py-12 lg:order-2">
         <div
           aria-hidden
           className="absolute right-0 top-0 h-64 w-64 rounded-bl-[8rem] bg-[#007a71]/10"
@@ -137,24 +145,22 @@ export default function LoginPage() {
             <div className="flex h-10 w-10 rotate-6 items-center justify-center rounded-xl bg-[#007a71] text-white">
               <Lock size={20} />
             </div>
-
           </div>
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold tracking-tight text-[#04302d]">
               Welcome back<span className="text-[#f4b942]">.</span>
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className={`mt-2 text-sm ${grayText}`}>
               Sign in to your account to continue.
             </p>
           </div>
 
           {/* Google */}
-          <Button
+          <button
             type="button"
-            variant="outline"
-            className="h-12 w-full gap-3 rounded-xl border-2 bg-white transition-all hover:-translate-y-0.5 hover:border-[#007a71] hover:shadow-md"
             onClick={handleGoogleLogin}
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border-2 border-[#e5e5e5] bg-white text-sm font-medium text-[#0a0a0a] transition-all hover:-translate-y-0.5 hover:border-[#007a71] hover:shadow-md"
           >
             <svg viewBox="0 0 48 48" className="h-5 w-5">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
@@ -163,26 +169,25 @@ export default function LoginPage() {
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.28-5.65c-2.02 1.35-4.6 2.15-8.62 2.15-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 43.62 14.62 48 24 48z" />
             </svg>
             Continue with Google
-          </Button>
+          </button>
 
           <div className="my-7 flex items-center gap-4">
-            <Separator className="flex-1" />
-            <span className="text-[11px] font-medium tracking-widest text-muted-foreground">
+            <div className="h-px flex-1 bg-[#e5e5e5]" />
+            <span
+              className={`text-[11px] font-medium tracking-widest ${grayText}`}
+            >
               OR USE EMAIL
             </span>
-            <Separator className="flex-1" />
+            <div className="h-px flex-1 bg-[#e5e5e5]" />
           </div>
 
-          <form onSubmit={handleEmailLogin} className="space-y-6">
-            {/* Email — floating label */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email */}
             <div className="relative">
-              <Mail
-                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === "email" ? "text-[#007a71]" : "text-muted-foreground"
-                  }`}
-              />
-              <Input
+              <Mail className={iconClass("email")} />
+              <input
                 id="email"
-                name='email'
+                name="email"
                 type="email"
                 placeholder=" "
                 value={email}
@@ -190,27 +195,19 @@ export default function LoginPage() {
                 onBlur={() => setFocused(null)}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="peer h-14 rounded-xl border-2 bg-white pl-11 pt-4 focus-visible:border-[#007a71] focus-visible:ring-[#007a71]/20"
+                className={inputStyle}
               />
-              <Label
-                htmlFor="email"
-                className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-muted-foreground transition-all duration-200 peer-focus:top-3 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-[#007a71] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-semibold"
-              >
+              <label htmlFor="email" className={floatingLabel}>
                 Email address
-              </Label>
+              </label>
             </div>
 
-            {/* Password — floating label */}
+            {/* Password */}
             <div className="relative">
-              <Lock
-                className={`absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors ${focused === "password"
-                    ? "text-[#007a71]"
-                    : "text-muted-foreground"
-                  }`}
-              />
-              <Input
+              <Lock className={iconClass("password")} />
+              <input
                 id="password"
-                name='password'
+                name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder=" "
                 value={password}
@@ -218,48 +215,25 @@ export default function LoginPage() {
                 onBlur={() => setFocused(null)}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="peer h-14 rounded-xl border-2 bg-white pl-11 pr-12 pt-4 focus-visible:border-[#007a71] focus-visible:ring-[#007a71]/20"
+                className={`${inputStyle} pr-12`}
               />
-              <Label
-                htmlFor="password"
-                className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-muted-foreground transition-all duration-200 peer-focus:top-3 peer-focus:text-[11px] peer-focus:font-semibold peer-focus:text-[#007a71] peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:font-semibold"
-              >
+              <label htmlFor="password" className={floatingLabel}>
                 Password
-              </Label>
-
+              </label>
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-[#007a71]"
+                className={`absolute right-4 top-1/2 -translate-y-1/2 ${grayText} transition-colors hover:text-[#007a71]`}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
-            {/* Remember + forgot */}
-            {/* <div className="flex items-center justify-between text-sm">
-              <label className="flex cursor-pointer select-none items-center gap-2 text-muted-foreground">
-                <input
-                  type="checkbox"
-                  checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 accent-[#007a71]"
-                />
-                Remember me
-              </label>
-              <Link
-                href="/forgot-password"
-                className="font-medium text-[#007a71] hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div> */}
-
             {/* Submit */}
-            <Button
+            <button
               type="submit"
-              className="group relative h-12 w-full gap-2 overflow-hidden rounded-xl bg-[#04302d] text-base font-semibold text-white shadow-lg transition-all duration-300 hover:bg-[#007a71] hover:shadow-xl"
+              className="group relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#04302d] text-base font-semibold text-white shadow-lg transition-all duration-300 hover:bg-[#007a71] hover:shadow-xl"
             >
               <span
                 aria-hidden
@@ -270,10 +244,10 @@ export default function LoginPage() {
                 size={18}
                 className="relative transition-transform duration-300 group-hover:translate-x-1.5"
               />
-            </Button>
+            </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-muted-foreground">
+          <p className={`mt-8 text-center text-sm ${grayText}`}>
             New here?{" "}
             <Link
               href="/register"
@@ -287,4 +261,3 @@ export default function LoginPage() {
     </main>
   );
 }
-
