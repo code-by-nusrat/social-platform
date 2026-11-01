@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Link from "next/link";
 import {
   Eye,
@@ -32,28 +33,56 @@ export default function LoginPage() {
   const [focused, setFocused] = useState<Field>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (!email || !password) {
-      window.alert("Please fill in all required fields.");
-      return;
-    }
+  //   if (!email || !password) {
+  //     window.alert("Please fill in all required fields.");
+  //     return;
+  //   }
 
+  //   const { data, error } = await authClient.signIn.email({
+  //     email,
+  //     password,
+  //   });
+
+  //   if (data) {
+  //     router.push("/");
+  //     router.refresh();
+  //   }
+  //   if (error) {
+  //     window.alert(error.message);
+  //   }
+  // };
+const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  if (!email || !password) {
+    toast.warn("Please fill in all required fields.");
+    return;
+  }
+
+  try {
     const { data, error } = await authClient.signIn.email({
       email,
       password,
     });
 
+    // wrong email or password (or any other sign in error)
+    if (error) {
+      toast.error(error.message || "Invalid email or password.");
+      return;
+    }
+
     if (data) {
+      toast.success("Signed in successfully!");
       router.push("/");
       router.refresh();
     }
-    if (error) {
-      window.alert(error.message);
-    }
-  };
-
+  } catch {
+    toast.error("Could not connect to the server. Please try again.");
+  }
+};
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",

@@ -1,45 +1,6 @@
-// // import Image from 'next/image';
-// // import React from 'react';
-// // import bannerPic from '/images/photo-1743950674205-40899590c63a.avif'
-// // const Banner = () => {
-// //     return (
-// //         <div>
-// //             <Image src={bannerPic} alt='bannerpic'
-// //                 fill
-// //                 priority
-// //                 className="object-cover"
-// //                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1280px"></Image>
-// //         </div>
-// //     );
-// // };
 
-// // export default Banner;
-// import Image from 'next/image';
-// import React from 'react';
-
-// const Banner = () => {
-//     return (
-//         <div className="">
-//             <div>
-
-//             </div>
-//             <div>
-//             <Image
-//                 src="/images/photo-1743950674205-40899590c63a.avif"
-//                 alt="Community banner"
-//                 width={500}
-//                 height={500}
-//             />
-//             </div>
-
-//         </div>
-//     );
-// };
-
-// export default Banner;
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 const Banner = () => {
     return (
@@ -76,7 +37,7 @@ const Banner = () => {
 
                             <Link
                                 href="/register"
-                                className="border-2 border-[#007a71] text-[#007a71] px-6 py-3 rounded-lg font-semibold hover:bg-[#007a71] hover:text-white transition"
+                                className="border-2 border-[#007a71] text-[#007a71] px-6 py-3 rounded-lg font-semibold "
                             >
                                 Join Community
                             </Link>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { CalendarPlus, Ticket } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Ticket } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,17 @@ const page = async () => {
 
     return (
         <div className="mx-auto max-w-7xl px-5 py-12">
+             <Link
+                            href="/"
+                            style={cursive}
+                            className="group mb-10 inline-flex items-center gap-2 text-2xl text-[#007a71] transition-colors hover:text-[#04302d]"
+                        >
+                            <ArrowLeft
+                                size={20}
+                                className="transition-transform group-hover:-translate-x-1"
+                            />
+                            Back to Homepage
+                        </Link>
             <div className="mb-12 flex flex-col items-center gap-3 text-center">
                 <p style={cursive} className="text-2xl text-[#007a71]">
                     {user.name}&apos;s

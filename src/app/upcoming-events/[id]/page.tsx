@@ -88,7 +88,7 @@ export default function UpcomingEventDetailPage({
     return (
         <div className="mx-auto max-w-6xl px-5 py-10"> 
             <Link
-                href="/upcoming-events"
+                href="/"
                 style={cursive}
                 className="group mb-10 inline-flex items-center gap-2 text-2xl text-[#007a71] transition-colors hover:text-[#04302d]"
             >
@@ -96,7 +96,7 @@ export default function UpcomingEventDetailPage({
                     size={20}
                     className="transition-transform group-hover:-translate-x-1"
                 />
-                Back to Upcoming Events
+                Back to Homepage
             </Link>
 
             <div className="grid items-start gap-12 lg:grid-cols-[1.1fr_1fr]">

@@ -23,7 +23,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { ArrowRight, CalendarCheck, CalendarDays, MapPin, Ticket } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarCheck, CalendarDays, MapPin, Ticket } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +78,7 @@ function StatCard({
 }) {
     return (
         <Card className="rounded-2xl border-2 border-[#007a71]/20 py-0 shadow-sm">
+            
             <CardContent className="flex items-center gap-4 p-5">
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#007a71]/10 text-[#007a71]">
                     {icon}
@@ -98,6 +99,7 @@ function StatCard({
 function SectionTitle({ title, count }: { title: string; count: number }) {
     return (
         <div className="mb-6 flex items-center gap-3">
+            
             <h2 style={cursive} className="text-3xl text-[#04302d]">
                 {title}
             </h2>
@@ -122,6 +124,7 @@ function JoinedCard({ item, past }: { item: JoinedEvent; past: boolean }) {
 
     return (
         <div className="relative">
+            
             {/* timeline dot */}
             <span
                 className={`absolute -left-10 top-16 hidden h-4 w-4 rounded-full border-4 border-[#f4f7f6] sm:block ${
@@ -309,6 +312,17 @@ const page = async () => {
 
     return (
         <div className="mx-auto max-w-6xl px-5 py-12">
+             <Link
+                            href="/"
+                            style={cursive}
+                            className="group mb-10 inline-flex items-center gap-2 text-2xl text-[#007a71] transition-colors hover:text-[#04302d]"
+                        >
+                            <ArrowLeft
+                                size={20}
+                                className="transition-transform group-hover:-translate-x-1"
+                            />
+                            Back to Homepage
+                        </Link>
             {/* header */}
             <div className="mb-10 flex flex-col items-center gap-4 text-center">
                 <Avatar className="h-20 w-20 border-4 border-[#FDEB9E] shadow-lg">
