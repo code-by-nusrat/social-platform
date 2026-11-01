@@ -45,7 +45,7 @@ const Banner = () => {
                     </div>
 
                     {/* Right Image */}
-                    <div className="relative w-full h-[280px] sm:h-[350px] lg:h-[450px]">
+                    <div className="relative w-full h-70 sm:h-87.5 lg:h-112.5">
                         <Image
                             src="/images/photo-1743950674205-40899590c63a.avif"
                             alt="Community volunteers working together"

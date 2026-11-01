@@ -87,7 +87,7 @@ function CodeBlockActions({
 function CodeBlockCopyButton({
   value,
   variant = "ghost",
-  size = "icon-xs",
+  size = "icon",
   className,
   onClick,
   ...props
