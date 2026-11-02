@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/lib/getTokenFromClient.ts", "src/lib/getTokenFromServer.ts"  ],
   "exclude": ["node_modules"]
 }

@@ -1,24 +1,4 @@
-// // import { auth } from '@/lib/auth';
-// // import { headers } from 'next/headers';
-// // import React from 'react';
 
-// // const page = async() => {
-// //     const session =await auth.api.getSession({
-// //         headers:await headers(),
-// //     })
-// //     const user =session?.user
-// //     console.log(user)
-// //     const res =await fetch(`http://localhost:5000/joined-event/${user?.email}`)
-// //     const joining =await res.json()
-// //     console.log(joining)
-// //     return (
-// //         <div>
-// //             join events
-// //         </div>
-// //     );
-// // };
-
-//export default page
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -30,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 type JoinedEvent = {
     _id: string; // id of the join record
@@ -56,16 +37,38 @@ function getDaysLeft(date: string) {
 
 async function getJoinedEvents(email: string): Promise<JoinedEvent[] | null> {
     try {
+        const token = await getTokenFromServer();
+
+        if (!token) {
+            console.log("JWT token not found");
+            return null;
+        }
+
+        console.log("JWT token generated successfully");
+
         const res = await fetch(
-            `http://localhost:5000/joined-event/${encodeURIComponent(email)}`,
-            { cache: "no-store" }
+            `${process.env.NEXT_PUBLIC_API_URL}/joined-event/${encodeURIComponent(email)}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                cache: "no-store",
+            }
         );
-        if (!res.ok) return null;
+
+        if (!res.ok) {
+            console.log("API error:", res.status);
+            return null;
+        }
+
         return await res.json();
-    } catch {
+
+    } catch (error) {
+        console.error("Error fetching joined events:", error);
         return null;
     }
 }
+
 
 function StatCard({
     icon,

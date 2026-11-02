@@ -33,7 +33,7 @@ export default function LoginPage() {
   const [focused, setFocused] = useState<Field>(null);
   const router = useRouter();
 
-  // const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  
   //   e.preventDefault();
 
   //   if (!email || !password) {

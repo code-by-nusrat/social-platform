@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { authClient } from "@/lib/auth-client";
 
 const API = "http://localhost:5000";
 
@@ -86,10 +87,11 @@ function MyEventCard({ event, email }: { event: MyEvent; email: string }) {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
+        
         try {
-            const res = await fetch(`${API}/update-event/${event._id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-event/${event._id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json"},
                 body: JSON.stringify({ email, ...form }),
             });
             const data = await res.json().catch(() => ({}));

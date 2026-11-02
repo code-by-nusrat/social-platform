@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -109,23 +110,34 @@ const Joinbtn = ({
             return;
         }
 
-        const joiningDate = event.date;
         const { _id, ...eventData } = event; // take the event's _id out
-        const data = {
+        const body = {
             ...eventData, // event first
             ...user, // user second, so the user's email wins
             eventId: _id, // keep the event id under another name
-            joiningDate: joiningDate,
+            joiningDate: event.date,
         };
 
         try {
-            const res = await fetch("http://localhost:5000/joined-event", {
+            const { data, error } = await authClient.token();
+            if (error) console.error("token error:", error);
+
+
+            const token = data?.token;
+            if (!token) {
+                toast.error("Authentication token not found. Please login again.");
+                return;
+            }
+           console.log("Token response:", data);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/joined-event`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(body),
             });
+
             const joiningRes = await res.json();
 
             // 409 = this user already joined this event
@@ -141,7 +153,8 @@ const Joinbtn = ({
             }
 
             toast.error(joiningRes.message || "Something went wrong");
-        } catch {
+        } catch (err) {
+            console.error(err);
             toast.error("Could not connect to the server");
         }
     };

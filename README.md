@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# UnityHub – Community Event Management Platform
 
-First, run the development server:
+**UnityHub** is a community-driven event management platform where people can create, discover, join, and manage social service events. It encourages people to work together and make a positive impact through activities like tree plantation, donation campaigns, community cleanups, awareness programs, and more.
+
+🌐 **Live Website:** [Visit UnityHub](https://your-live-site-url.vercel.app)
+
+## ✨ Key Features
+
+- **User Authentication:** Secure registration and login system with Better Auth, including social login options.
+- **Create Events:** Authenticated users can create and publish community events with relevant details.
+- **Discover Upcoming Events:** Browse upcoming events and explore different community activities.
+- **Join Events:** Logged-in users can join events and become part of social initiatives.
+- **JWT Authentication:** Protected API routes using JWT verification to ensure secure communication between the frontend and backend.
+- **My Events:** Users can manage and track the events they have created.
+- **Joined Events:** Users can view the events they have joined.
+- **Event Management:** Event creators can update and delete their own events.
+- **Responsive Design:** Fully responsive interface for desktop, tablet, and mobile devices.
+- **Interactive UI:** Modern interface with reusable components, notifications, and smooth user interactions.
+
+## 🛠️ Technologies Used
+
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Better Auth
+- JWT (JSON Web Token)
+- JOSE
+
+### Other Tools
+- Git & GitHub
+- Vercel
+- React Toastify
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally.
+
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone YOUR_GITHUB_REPOSITORY_URL
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Navigate to the Project Directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd social-platform
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Install Frontend Dependencies
 
-## Learn More
+```bash
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Configure Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env` file in your frontend and backend directories and add the required environment variables.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Example backend configuration:
 
-## Deploy on Vercel
+```env
+MONGODB_URI=your_mongodb_connection_string
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Add your Better Auth secret, base URL, and other required configuration to the frontend environment file.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. Run the Backend Server
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### 6. Run the Frontend Application
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 🎯 Project Purpose
+
+UnityHub aims to bring people together through meaningful community activities. It provides a simple platform for organizing social initiatives, connecting volunteers, and encouraging positive changes in society.
+
+## 👩‍💻 Developer
+
+**Nusrat Jahan**
+
+- GitHub: [code-by-nusrat](https://github.com/code-by-nusrat)
+
+---
+
+⭐ If you find this project interesting, feel free to explore the repository and share your feedback!
