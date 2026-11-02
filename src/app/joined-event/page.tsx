@@ -47,7 +47,7 @@ async function getJoinedEvents(email: string): Promise<JoinedEvent[] | null> {
         console.log("JWT token generated successfully");
 
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/joined-event/${encodeURIComponent(email)}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/joined-event`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

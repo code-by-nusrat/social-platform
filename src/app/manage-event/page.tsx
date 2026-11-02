@@ -14,17 +14,48 @@ const cursive = {
     fontFamily: "'Brush Script MT', 'Segoe Script', 'Lucida Handwriting', cursive",
 };
 
-async function getMyEvents(email: string): Promise<MyEvent[] | null> {
+// async function getMyEvents(email: string): Promise<MyEvent[] | null> {
+//     try {
+//         const token = await getTokenFromServer();
+
+//         if (!token) {
+//             console.log("manage-event: JWT token not found");
+//             return null;
+//         }
+
+//         const res = await fetch(
+//             `${process.env.NEXT_PUBLIC_API_URL}/manage-event`,
+//             {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`,
+//                 },
+//                 cache: "no-store",
+//             }
+//         );
+
+//         if (!res.ok) {
+//             console.log("manage-event: API error", res.status);
+//             return null;
+//         }
+
+//         return await res.json();
+
+//     } catch (error) {
+//         console.error("manage-event: fetch failed", error);
+//         return null;
+//     }
+// }
+async function getMyEvents(): Promise<MyEvent[] | null> {
     try {
         const token = await getTokenFromServer();
 
         if (!token) {
-            console.log("manage-event: JWT token not found");
+            console.log("JWT token not found");
             return null;
         }
 
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/my-events/${encodeURIComponent(email)}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/manage-event`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -34,18 +65,17 @@ async function getMyEvents(email: string): Promise<MyEvent[] | null> {
         );
 
         if (!res.ok) {
-            console.log("manage-event: API error", res.status);
+            console.log("Manage events API error:", res.status);
             return null;
         }
 
         return await res.json();
 
     } catch (error) {
-        console.error("manage-event: fetch failed", error);
+        console.error("Manage events fetch failed:", error);
         return null;
     }
 }
-
 const Page = async () => {
     const session = await auth.api.getSession({
         headers: await headers(),
@@ -56,7 +86,7 @@ const Page = async () => {
     // Private page: not logged in -> redirect to login
     if (!user) redirect("/login");
 
-    const events = await getMyEvents(user.email);
+    const events = await getMyEvents();
 
     return (
         <div className="mx-auto max-w-7xl px-5 py-12">

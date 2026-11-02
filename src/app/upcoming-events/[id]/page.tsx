@@ -71,7 +71,7 @@ export default function UpcomingEventDetailPage({
         const checkJoined = async () => {
             try {
                 const res = await fetch(
-                    `http://localhost:5000/joined-event/${encodeURIComponent(user.email)}`
+                    `${process.env.NEXT_PUBLIC_API_URL}/joined-event/${encodeURIComponent(user.email)}`
                 );
 
                 if (!res.ok) return;

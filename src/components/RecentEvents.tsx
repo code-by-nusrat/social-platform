@@ -39,7 +39,7 @@ function daysLeftText(days: number) {
 
 async function getRecentEvents(): Promise<EventItem[] | null> {
     try {
-        const res = await fetch("http://localhost:5000/recent-events", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recent-events`, {
             cache: "no-store",
         });
         if (!res.ok) return null;
