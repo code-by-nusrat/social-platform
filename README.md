@@ -3,7 +3,8 @@
 
 **UnityHub** is a community-driven event management platform where people can create, discover, join, and manage social service events. It encourages people to work together and make a positive impact through activities like tree plantation, donation campaigns, community cleanups, awareness programs, and more.
 
-🌐 **Live Website:** [Visit UnityHub](https://your-live-site-url.vercel.app)
+🌐 **Live Website:** [Visit UnityHub](https://social-platform-fronted.vercel.app)
+🌐 **Github Link** https://github.com/code-by-nusrat/social-platform
 
 ## ✨ Key Features
 
